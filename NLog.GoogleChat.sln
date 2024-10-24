@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.35130.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.GoogleChat", "NLog.GoogleChat\NLog.GoogleChat.csproj", "{CD7FA3AC-6045-4A34-99BE-C1FDA8084695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.GoogleChat.NetCore31.Demo", "NLog.GoogleChat.NetCore31.Demo\NLog.GoogleChat.NetCore31.Demo.csproj", "{309191AE-76D2-4AAC-836B-5C44A2814B76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD7FA3AC-6045-4A34-99BE-C1FDA8084695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD7FA3AC-6045-4A34-99BE-C1FDA8084695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD7FA3AC-6045-4A34-99BE-C1FDA8084695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD7FA3AC-6045-4A34-99BE-C1FDA8084695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{309191AE-76D2-4AAC-836B-5C44A2814B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{309191AE-76D2-4AAC-836B-5C44A2814B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{309191AE-76D2-4AAC-836B-5C44A2814B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{309191AE-76D2-4AAC-836B-5C44A2814B76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2D29594-E153-40DC-B5F5-8F849BFE592C}
+	EndGlobalSection
+EndGlobal
