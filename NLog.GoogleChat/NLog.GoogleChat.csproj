@@ -7,7 +7,9 @@
     <Authors>Phill Chiu</Authors>
     <Company />
     <Title></Title>
-    <Description>NLog target for Google Chat</Description>
+    <Description>NLog target (TargetWithLayout) for Google Chat.
+Use HttpClientFactory with RetryPolicy.</Description>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>

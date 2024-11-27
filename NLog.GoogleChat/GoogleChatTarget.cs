@@ -13,14 +13,25 @@ using System.Threading.Tasks;
 namespace NLog.GoogleChat
 {
     [Target("GoogleChat")]
-    public sealed class GoogleChatTarget : AsyncTaskTarget
+    public sealed class GoogleChatTarget : TargetWithLayout
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private IHttpClientFactory _httpClientFactory;
+
         [RequiredParameter]
         public string WebhookUrl { get; set; }
 
         public GoogleChatTarget()
         {
+            
+        }
+
+        protected override void InitializeTarget()
+        {
+            if (string.IsNullOrWhiteSpace(WebhookUrl))
+            {
+                throw new ArgumentOutOfRangeException("WebhookUrl", "WebhookUrl cannot be empty.");
+            }
+
             InternalLogger.Debug("=======initialize constructor start=======");
             var services = new ServiceCollection();
             services.AddHttpClient("GoogleChatLogger", client =>
@@ -35,26 +46,37 @@ namespace NLog.GoogleChat
             _httpClientFactory = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>();
 
             InternalLogger.Debug("=======initialize constructor end=======");
+
+            base.InitializeTarget();
         }
 
-        protected override async Task WriteAsyncTask(LogEventInfo logEvent, CancellationToken cancellationToken)
+        protected override void Write(LogEventInfo logEvent)
         {
-            var message = Layout.Render(logEvent);
-            var payload = new
-            {
-                text = $"{message}"
-            };
-
-            var content = new StringContent(
-                System.Text.Json.JsonSerializer.Serialize(payload),
-                Encoding.UTF8,
-                "application/json");
-
             try
             {
+                var message = Layout.Render(logEvent);
+                var payload = new
+                {
+                    text = $"{message}"
+                };
+
+                var content = new StringContent(
+                    System.Text.Json.JsonSerializer.Serialize(payload),
+                    Encoding.UTF8,
+                    "application/json");
+
                 var client = _httpClientFactory.CreateClient("GoogleChatLogger");
-                var response = await client.PostAsync(WebhookUrl, content, cancellationToken);
-                InternalLogger.Debug($"response status : {response.StatusCode}");
+                var response = client.PostAsync(WebhookUrl, content).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorMessage = $"Failed to send to Google Chat. Status: {response.StatusCode}, Response: {response.Content.ReadAsStringAsync().Result}";
+                    InternalLogger.Error(errorMessage);
+                }
+                else
+                {
+                    InternalLogger.Debug($"Status Code:{response.StatusCode}");
+                }
             }
             catch (Exception ex)
             {
@@ -65,9 +87,10 @@ namespace NLog.GoogleChat
 
         private IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
+            //TooManyRequests(429) or >= 500 will retry
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .OrResult(msg => (int)msg.StatusCode == 429 || (int)msg.StatusCode >= 500)
                 .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
     }
