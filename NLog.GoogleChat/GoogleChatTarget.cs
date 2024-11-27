@@ -21,6 +21,7 @@ namespace NLog.GoogleChat
 
         public GoogleChatTarget()
         {
+            InternalLogger.Debug("=======initialize constructor start=======");
             var services = new ServiceCollection();
             services.AddHttpClient("GoogleChatLogger", client =>
             {
@@ -32,6 +33,8 @@ namespace NLog.GoogleChat
             .AddPolicyHandler(GetRetryPolicy());
 
             _httpClientFactory = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>();
+
+            InternalLogger.Debug("=======initialize constructor end=======");
         }
 
         protected override async Task WriteAsyncTask(LogEventInfo logEvent, CancellationToken cancellationToken)
@@ -42,8 +45,6 @@ namespace NLog.GoogleChat
                 text = $"{message}"
             };
 
-            var client = _httpClientFactory?.CreateClient("GoogleChatLogger");
-
             var content = new StringContent(
                 System.Text.Json.JsonSerializer.Serialize(payload),
                 Encoding.UTF8,
@@ -51,11 +52,13 @@ namespace NLog.GoogleChat
 
             try
             {
-                await client.PostAsync(WebhookUrl, content, cancellationToken);
+                var client = _httpClientFactory.CreateClient("GoogleChatLogger");
+                var response = await client.PostAsync(WebhookUrl, content, cancellationToken);
+                InternalLogger.Debug($"response status : {response.StatusCode}");
             }
             catch (Exception ex)
             {
-                InternalLogger.Error(ex, "Error posting to Google Chat");
+                InternalLogger.Error(ex, ex.Message);
                 throw;
             }
         }

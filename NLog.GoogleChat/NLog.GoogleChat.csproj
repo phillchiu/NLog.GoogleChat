@@ -1,15 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/phillchiu/NLog.GoogleChat</PackageProjectUrl>
+    <Authors>Phill Chiu</Authors>
+    <Company />
+    <Title></Title>
+    <Description>NLog target for Google Chat</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.32" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.32" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.32" />
-    <PackageReference Include="NLog" Version="4.7.2" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.2" />
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 
 </Project>
